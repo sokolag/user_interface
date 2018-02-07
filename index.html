@@ -226,23 +226,32 @@
                                                 },
                                                 { view: "resizer" },
                                                 {
-
+                                                    view: "datatable",
+                                                    css: "rounded_top",
+                                                    scrollX: true,
+                                                    columns: gridColumns,
+                                                    select: "row",
+                                                    multiselect: true,
+                                                    data: selected,
+                                                    autoConfig: true,
+                                                    resizeColumn: true
                                                 }
-                                            ]
+                                            }
+                                        ]
 
-                                        }
-                                    },
+                                    }
+                                },
 
 
-                                ]
-                            }
+                            ]
+                        }
 
-                        ]
-                    }
+                    ]
+                }
 
-                ]
-            }
-        ]
+            ]
+        }
+    ]
     });
 
     // Функция открывает вкладку "Закладка"
