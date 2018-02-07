@@ -1,0 +1,50 @@
+{
+  "_from": "webix",
+  "_id": "webix@5.1.1",
+  "_inBundle": false,
+  "_integrity": "sha1-BLYRAAZwr4mWBVWSa2untZyvZU0=",
+  "_location": "/webix",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "webix",
+    "name": "webix",
+    "escapedName": "webix",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/webix/-/webix-5.1.1.tgz",
+  "_shasum": "04b611000670af89960555926b6ba7b59caf654d",
+  "_spec": "webix",
+  "_where": "c:\\Apistar",
+  "author": {
+    "name": "XB Software"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Webix UI",
+  "keywords": [
+    "webix",
+    "ui",
+    "tree",
+    "datatable",
+    "list",
+    "chart",
+    "form",
+    "grid"
+  ],
+  "license": "SEE LICENSE IN license.text",
+  "main": "webix.js",
+  "name": "webix",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "types": "webix.d.ts",
+  "version": "5.1.1"
+}
