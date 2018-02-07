@@ -213,6 +213,23 @@
                                         }
                                     },
                                     {
+                                        header: "События",
+                                        width: 150,
+                                        height: 1,
+                                        body: {
+                                            id: "events",
+                                            view: "datatable",
+                                            css: "rounded_top",
+                                            scrollX: true,
+                                            columns: gridColumns,
+                                            select: "row",
+                                            multiselect: true,
+                                            data: selected,
+                                            autoConfig: true,
+                                            resizeColumn: true
+                                        }
+                                    },
+                                    {
                                         header: "Отчет",
                                         width: 150,
                                         height: 1,
