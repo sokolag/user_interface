@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./src/webix/components/sidebar/sidebar.css">
     <script src="./src/data/data.js"></script>
 </head>
-    
+
 <body>
     <script type="text/javascript" charset="utf-8">
     var selected = sdpData;
@@ -92,7 +92,18 @@
                     { view: "button", type: "icon", width: 45, css: "app_button", icon: "calendar", badge: 3, tooltip: "Расписание" },
                     { view: "button", type: "icon", width: 45, css: "app_button", icon: "envelope-o", badge: 4, tooltip: "Почта" },
                     { view: "button", type: "icon", width: 45, css: "app_button", icon: "bell-o", badge: 10, tooltip: "События" },
-                    { view: "button", type: "icon", width: 30, css: "app_button", icon: "users", tooltip: "Управление пользователями" },
+                    {
+                        view: "button",
+                        type: "icon",
+                        width: 30,
+                        css: "app_button",
+                        icon: "users",
+                        tooltip: "Управление пользователями",
+                        id = "users_button",
+                        on: {
+                            'onItemClick': change_tab
+                        }
+                    },
                     { view: "button", type: "icon", width: 35, css: "app_button", icon: "cog", tooltip: "Настройки" },
                     { view: "button", type: "icon", width: 35, css: "app_button", icon: "sign-out", tooltip: "Выход", align: "right" }
                 ]
@@ -102,7 +113,7 @@
                         rows: [{ template: "<img hspace=60 src='src/img/zaichuk.jpg'/>", height: 250 }, {
                             view: "sidebar",
                             on: {
-                                'onItemClick': select_bookmarks
+                                'onItemClick': change_tab
                             },
                             template: "{common.icon()}<a target='_blank' href='#link#' style='text-decoration: none; color: gray;'>#value#</a>",
                             data: menu_data,
@@ -158,9 +169,9 @@
                                     },
                                     {
                                         header: "Пользователи",
-                                        id: "users_tab",
                                         width: 150,
                                         body: {
+                                            id: "users_tab",
                                             rows: [{
                                                 view: "list",
                                                 drag: true,
@@ -211,11 +222,14 @@
     });
 
     // Функция открывает вкладку "Закладка"
-    function select_bookmarks(id) {
+    function change_tab(id) {
         console.log(id);
         if (id == "ui_tabs") {
             console.log("Закладки");
             $$("tabViewInfo").getTabbar().setValue("bookmarks_tab");
+        } else if (id == "users_button") {
+            console.log("Пользователи");
+            $$("tabViewInfo").getTabbar().setValue("users_tab");
         }
     };
     </script>
