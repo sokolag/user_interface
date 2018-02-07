@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="./src/webix/webix.css" type="text/css" charset="utf-8">
+    <script src="./src/webix/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./src/webix/components/sidebar/sidebar.js"></script>
+    <link rel="stylesheet" href="./src/webix/components/sidebar/sidebar.css">
+    <script src="./src/data/data_2.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript" charset="utf-8">
+    var selected = sdpData;
+    var tab_data = tabData;
+    var bm_data = bmData;
+    var userPath = "src/img/zaichuk.jpg";
+    var menu_data = [{
+            id: "user",
+            icon: "user",
+            value: "Пользователь: Зайчук Алексей",
+            link: "javascript:void(0)",
+            data: [
+                { id: "ui_status", value: "Admin", icon: "user-circle", link: "javascript:void(0)" },
+                { id: "ui_mail", value: "Личные сообщения", icon: "envelope-o", badge: 4, link: "javascript:void(0)" },
+                { id: "ui_settings", value: "Настройки профиля", icon: "cog", link: "javascript:void(0)" },
+                { id: "ui_logout", value: "Выход", icon: "sign-out", link: "javascript:void(0)" }
+            ]
+        },
+        {
+            id: "ui",
+            icon: "desktop",
+            value: "Расширенный пользовательский интерфейс",
+            link: "javascript:void(0)",
+            data: [{
+                    id: "ui_tabs",
+                    value: "Закладки",
+                    icon: "bookmark",
+                    link: "javascript:void(0)"
+                },
+                {
+                    id: "ui_start",
+                    value: "Стартовая страница",
+                    icon: "link",
+                    link: "http://127.0.0.1:12345/index_sdp_premise_ps_icon.html"
+                }
+            ]
+        },
+        {
+            id: "reports",
+            icon: "table",
+            value: "Отчеты",
+            link: "javascript:void(0)",
+            data: [
+                { id: "balance", value: "Водный баланс", icon: "file" },
+                { id: "nul", value: "Нулевое потребление", icon: "file" },
+                { id: "cra", value: "Сходимость с ЦРА", icon: "file" },
+                { id: "data", value: "Передача данных с ТПУ", icon: "file" },
+                { id: "valid", value: "Валидация данных с ТПУ", icon: "file" },
+                { id: "minus", value: "Отрицательная разница регистра", icon: "file" },
+                { id: "minus_vol", value: "Отрицательные значения объема", icon: "file" },
+                { id: "strange", value: "Нехарактерное потребление", icon: "file" }
+            ]
+        },
+        { id: "trash", icon: "trash", value: "Корзина" }
+    ];
+
+    webix.ui({
+        rows: [{
+                view: "toolbar",
+                padding: 3,
+                cols: [{
+                        view: "button",
+                        type: "icon",
+                        icon: "bars",
+                        width: 30,
+                        tooltip: "Меню",
+                        align: "left",
+                        css: "app_button",
+                        click: function() {
+                            $$("$sidebar1").toggle()
+                        }
+                    },
+
+                    { view: "label", label: "СЕРВЕР ПОДСИСТЕМЫ ИЗМЕРЕНИЯ И УЧЕТА ГУП \"ВОДОКАНАЛ САНКТ-ПЕТЕРБУРГА\"", align: "right" },
+                    { view: "button", type: "icon", icon: "server", width: 220, align: "right" },
+                    { view: "search", width: 200, value: "Поиск" },
+                    // { view: "button", type: "icon", width: 35, css: "app_button", icon: "search", tooltip: "Найти" },
+                    { view: "button", type: "icon", width: 35, css: "app_button", icon: "home", tooltip: "Домой" },
+                    { view: "button", type: "icon", width: 35, css: "app_button", icon: "save", tooltip: "Сохранить" },
+                    { view: "button", type: "icon", width: 45, css: "app_button", icon: "calendar", badge: 3, tooltip: "Расписание" },
+                    { view: "button", type: "icon", width: 45, css: "app_button", icon: "envelope-o", badge: 4, tooltip: "Почта" },
+                    { view: "button", type: "icon", width: 45, css: "app_button", icon: "bell-o", badge: 10, tooltip: "События" },
+                    { view: "button", type: "icon", width: 30, css: "app_button", icon: "users", tooltip: "Управление пользователями" },
+                    { view: "button", type: "icon", width: 35, css: "app_button", icon: "cog", tooltip: "Настройки" },
+                    { view: "button", type: "icon", width: 35, css: "app_button", icon: "sign-out", tooltip: "Выход", align: "right" }
+                ]
+            },
+            {
+                cols: [{
+                        rows: [{ template: "<img hspace=60 src='src/img/zaichuk.jpg'/>", height: 250 }, {
+                            view: "sidebar",
+                            on: {
+                                'onItemClick': select_bookmarks
+                            },
+                            template: "{common.icon()}<a target='_blank' href='#link#' style='text-decoration: none; color: gray;'>#value#</a>",
+                            data: menu_data,
+                            width: 350,
+                            select: false
+                        }]
+
+                    },
+                    {
+                        // type: "wide",
+                        rows: [{
+                                view: "tabview",
+                                id: "tabViewInfo",
+                                animate: true,
+                                cells: [{
+                                        header: "Закладки",
+                                        width: 150,
+                                        body: {
+                                            id: "bookmarks_tab",
+                                            rows: [{
+                                                    view: "datatable",
+                                                    id: "bookmarks",
+                                                    css: "rounded_top",
+                                                    scrollX: true,
+                                                    columns: tabColumns,
+                                                    select: "row",
+                                                    multiselect: true,
+                                                    data: tab_data,
+                                                    autoConfig: true,
+                                                    resizeColumn: true
+                                                },
+                                                { view: "resizer" },
+                                                {
+                                                    cols: [
+                                                        { gravity: 3 },
+                                                        { view: "button", label: "Создать", type: "icon", icon: "plus-square", width: 100 },
+                                                        {
+                                                            view: "button",
+                                                            label: "Удалить",
+                                                            type: "icon",
+                                                            icon: "trash",
+                                                            width: 100,
+                                                            click: function() {
+                                                                $$("bookmarks").remove($$("bookmarks").getSelectedId());
+                                                            }
+                                                        },
+                                                        { view: "button", label: "Дублировать", type: "icon", icon: "copy", width: 120 }
+                                                    ]
+                                                }
+                                            ]
+
+                                        }
+                                    },
+                                    {
+                                        header: "Пользователи",
+                                        id: "users_tab",
+                                        width: 150,
+                                        body: {
+                                            rows: [{
+                                                view: "list",
+                                                drag: true,
+                                                multiselect: true,
+                                                id: "list1",
+                                                type: {
+                                                    width: "auto",
+                                                    height: "auto"
+                                                },
+                                                template: "#title#</br> Создан: #year#</br> Роль: #rank#",
+                                                data: bm_data
+                                            }, {
+                                                cols: [
+                                                    { gravity: 3 },
+                                                    { view: "button", label: "Создать", type: "icon", icon: "plus-square", width: 100 },
+                                                    { view: "button", label: "Удалить", type: "icon", icon: "trash", width: 100 },
+                                                    { view: "button", label: "Дублировать", type: "icon", icon: "copy", width: 120 }
+                                                ]
+                                            }]
+
+                                        }
+                                    },
+                                    {
+                                        header: "Таблица",
+                                        width: 150,
+                                        body: {
+                                            view: "datatable",
+                                            css: "rounded_top",
+                                            scrollX: true,
+                                            columns: gridColumns,
+                                            select: "row",
+                                            multiselect: true,
+                                            data: selected,
+                                            autoConfig: true,
+                                            resizeColumn: true
+                                        }
+                                    }
+
+                                ]
+                            }
+
+                        ]
+                    }
+
+                ]
+            }
+        ]
+    });
+
+    // Функция открывает вкладку "Закладка"
+    function select_bookmarks(id) {
+        console.log(id);
+        if (id == "ui_tabs") {
+            console.log("Закладки");
+            $$("tabViewInfo").getTabbar().setValue("bookmarks_tab");
+        }
+    };
+    </script>
+</body>
+
+</html>
