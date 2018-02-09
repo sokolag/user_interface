@@ -2,13 +2,12 @@
 <html>
 
 <head>
-
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./src/webix/webix.css" type="text/css" charset="utf-8">
     <script src="./src/webix/webix.js" type="text/javascript" charset="utf-8"></script>
     <script src="./src/webix/components/sidebar/sidebar.js"></script>
     <link rel="stylesheet" href="./src/webix/components/sidebar/sidebar.css">
-    <script src="./src/data/data.js"></script>
+    <script src="./src/data/data.js" charset="utf-8"></script>
 </head>
 
 <body>
@@ -16,6 +15,7 @@
     var selected = sdpData;
     var tab_data = tabData;
     var bm_data = bmData;
+    var ev_data = eventData;
     var userPath = "src/img/zaichuk.jpg";
     var menu_data = [{
             id: "user",
@@ -68,6 +68,294 @@
         { id: "trash", icon: "trash", value: "Корзина" }
     ];
 
+    var form1 = {
+        view: "form",
+        borderless: false,
+        scroll: true,
+        elements: [
+
+            {
+                view: "checkbox",
+                labelRight: "Адрес",
+                id: "address_check",
+                checkValue: "1address",
+                uncheckValue: "0address",
+                value: "1address",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Терр. сектор",
+                id: "area_check",
+                checkValue: "1area_sector",
+                uncheckValue: "0area_sector",
+                value: "1area_sector",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Абонент",
+                id: "client_check",
+                checkValue: "1client",
+                uncheckValue: "0client",
+                value: "1client",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Цвет",
+                id: "color_check",
+                checkValue: "1color",
+                uncheckValue: "0color",
+                value: "1color",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Район",
+                id: "district_check",
+                checkValue: "1district",
+                uncheckValue: "0district",
+                value: "1district",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "ИД Балтика",
+                id: "id_baltica_check",
+                checkValue: "1id_baltica",
+                uncheckValue: "0id_baltica",
+                value: "1id_baltica",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "ИД ЦРА",
+                id: "id_cra_check",
+                checkValue: "1id_cra",
+                uncheckValue: "0id_cra",
+                value: "1id_cra",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Уровень",
+                id: "level_check",
+                checkValue: "1level",
+                uncheckValue: "0level",
+                value: "1level",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Измеритель",
+                id: "meter_check",
+                checkValue: "1meter",
+                uncheckValue: "0meter",
+                value: "1meter",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Шина",
+                id: "meter_bus_check",
+                checkValue: "1meter_bus",
+                uncheckValue: "0meter_bus",
+                value: "1meter_bus",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Плейскод",
+                id: "placecode_check",
+                checkValue: "1placecode",
+                uncheckValue: "0placecode",
+                value: "1placecode",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Объект",
+                id: "premise_check",
+                checkValue: "1premise",
+                uncheckValue: "0premise",
+                value: "1premise",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "ДД",
+                id: "pres_sensor_check",
+                checkValue: "1pres_sensor",
+                uncheckValue: "0pres_sensor",
+                value: "1pres_sensor",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Насосная станция",
+                id: "pumping_station_check",
+                checkValue: "1pumping_station",
+                uncheckValue: "0pumping_station",
+                value: "1pumping_station",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Описание",
+                id: "sdp_description_check",
+                checkValue: "1sdp_description",
+                uncheckValue: "0sdp_description",
+                value: "1sdp_description",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Тех. сектор низ",
+                id: "source_tech_sector_check",
+                checkValue: "1source_tech_sector",
+                uncheckValue: "0source_tech_sector",
+                value: "1source_tech_sector",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Тех. сектор",
+                id: "tech_sector_check",
+                checkValue: "1tech_sector",
+                uncheckValue: "0tech_sector",
+                value: "1tech_sector",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Тип",
+                id: "type_check",
+                checkValue: "1type",
+                uncheckValue: "0type",
+                value: "1type",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "x",
+                id: "x_check",
+                checkValue: "1x",
+                uncheckValue: "0x",
+                value: "1x",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "y",
+                id: "y_check",
+                checkValue: "1y",
+                uncheckValue: "0y",
+                value: "1y",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            },
+            {
+                view: "checkbox",
+                labelRight: "Зона",
+                id: "zone_check",
+                checkValue: "1zone",
+                uncheckValue: "0zone",
+                value: "1zone",
+                labelWidth: 4,
+                on: {
+                    onChange: toggleColumn
+                }
+            }
+
+        ],
+        elementsConfig: {
+            labelPosition: "top",
+        }
+    };
+
+
+    webix.ui({
+        view: "window",
+        id: "win2",
+        width: 300,
+        height: 800,
+        position: "center",
+        modal: true,
+        move: true,
+        head: {
+            rows: [{
+                cols: [{ view: "label", label: "ВЫБЕРИТЕ СТОЛБЦЫ", align: "center" },
+                    { view: "button", type: "icon", width: 30, css: "app_button", icon: "window-close", tooltip: "Закрыть", click: function() { $$("win2").hide() } }
+                ]
+            }, {
+                cols: [{ view: "button", width: 150, tooltip: "Выбрать все", label: "Выбрать все", click: show_all },
+                    { view: "button", width: 150, tooltip: "Снять все", label: "Снять все", click: hide_all }
+                ]
+            }]
+
+        },
+        body: webix.copy(form1)
+    });
     webix.ui({
         rows: [{
                 view: "toolbar",
@@ -85,15 +373,26 @@
                         }
                     },
 
-                    { view: "label", label: "СЕРВЕР ПОДСИСТЕМЫ ИЗМЕРЕНИЯ И УЧЕТА ГУП \"ВОДОКАНАЛ САНКТ-ПЕТЕРБУРГА\"", align: "right" },
-                    { view: "button", type: "icon", icon: "server", width: 220, align: "right" },
+                    { view: "label", label: "ПОРТАЛ ПОДСИСТЕМЫ ИЗМЕРЕНИЯ И УЧЕТА ГУП \"ВОДОКАНАЛ САНКТ-ПЕТЕРБУРГА\"", align: "right" },
+                    { view: "button", type: "icon", icon: "server", width: 220, align: "right", disable: true },
                     { view: "search", width: 200, value: "Поиск" },
-                    // { view: "button", type: "icon", width: 35, css: "app_button", icon: "search", tooltip: "Найти" },
                     { view: "button", type: "icon", width: 35, css: "app_button", icon: "home", tooltip: "Домой" },
                     { view: "button", type: "icon", width: 35, css: "app_button", icon: "save", tooltip: "Сохранить" },
                     { view: "button", type: "icon", width: 45, css: "app_button", icon: "calendar", badge: 3, tooltip: "Расписание" },
                     { view: "button", type: "icon", width: 45, css: "app_button", icon: "envelope-o", badge: 4, tooltip: "Почта" },
-                    { view: "button", type: "icon", width: 45, css: "app_button", icon: "bell-o", badge: 10, tooltip: "События" },
+                    {
+                        view: "button",
+                        type: "icon",
+                        width: 45,
+                        css: "app_button",
+                        icon: "bell-o",
+                        badge: 10,
+                        tooltip: "События",
+                        id: "alarm_button",
+                        on: {
+                            'onItemClick': change_tab
+                        }
+                    },
                     {
                         view: "button",
                         type: "icon",
@@ -199,34 +498,18 @@
                                         }
                                     },
                                     {
-                                        header: "Таблица",
-                                        width: 150,
-                                        height: 1,
-                                        body: {
-                                            view: "datatable",
-                                            css: "rounded_top",
-                                            scrollX: true,
-                                            columns: gridColumns,
-                                            select: "row",
-                                            multiselect: true,
-                                            data: selected,
-                                            autoConfig: true,
-                                            resizeColumn: true
-                                        }
-                                    },
-                                    {
                                         header: "События",
                                         width: 150,
                                         height: 1,
                                         body: {
-                                            id: "events",
+                                            id: "events_tab",
                                             view: "datatable",
                                             css: "rounded_top",
                                             scrollX: true,
-                                            columns: gridColumns,
+                                            columns: eventColumns,
                                             select: "row",
                                             multiselect: true,
-                                            data: selected,
+                                            data: ev_data,
                                             autoConfig: true,
                                             resizeColumn: true
                                         }
@@ -235,6 +518,7 @@
                                         header: "Отчет",
                                         width: 150,
                                         height: 1,
+                                        scroll: true,
                                         body: {
                                             id: "report_1",
                                             rows: [{
@@ -243,13 +527,18 @@
                                                         },
                                                         { view: "resizer" },
                                                         {
-
+                                                            view: "form",
+                                                            scroll: false,
+                                                            width: 500,
+                                                            scroll: true,
+                                                            elements: form1
                                                         }
                                                     ]
                                                 },
                                                 { view: "resizer" },
                                                 {
                                                     view: "datatable",
+                                                    id: "masterdatatable",
                                                     css: "rounded_top",
                                                     scrollX: true,
                                                     columns: gridColumns,
@@ -257,24 +546,83 @@
                                                     multiselect: true,
                                                     data: selected,
                                                     autoConfig: true,
-                                                    resizeColumn: true
-                                                }                                            
-                                        ]
+                                                    resizeColumn: true,
+                                                    drag: true
+                                                },
+                                                {
+                                                    cols: [
+                                                        { gravity: 3 },
+                                                        {
+                                                            view: "button",
+                                                            label: "Сохранить в файл",
+                                                            width: 150,
+                                                            click: function() {
+                                                                webix.toExcel($$("masterdatatable"),{ignore: { "checked":true}});
+                                                            }
+                                                        },
+                                                        { view: "button", label: "Выбрать столбцы", width: 150, click: function() { $$("win2").show() } }
+                                                    ]
+                                                }
+                                            ]
 
-                                    }
-                                },
+                                        }
+                                    },
 
 
-                            ]
-                        }
+                                ]
+                            }
 
-                    ]
-                }
+                        ]
+                    }
 
-            ]
-        }
-    ]
+                ]
+            }
+        ]
     });
+
+
+    function hide_all() {
+        form1.elements.forEach(function(entry) {
+            var state = parseInt($$(entry.id).getValue().substr(0, 1));
+            var col_id = $$(entry.id).getValue().substr(1);
+            if ($$("masterdatatable").isColumnVisible(col_id) == true && state == 1) {
+                console.log(col_id + " " + $$("masterdatatable").isColumnVisible(col_id));
+                console.log("hide_all");
+                $$(entry.id).toggle();
+            }
+        })
+    };
+
+    function show_all() {
+        form1.elements.forEach(function(entry) {
+            var state = parseInt($$(entry.id).getValue().substr(0, 1));
+            var col_id = $$(entry.id).getValue().substr(1);
+            if ($$("masterdatatable").isColumnVisible(col_id) == false && state == 0) {
+                console.log(col_id + " " + $$("masterdatatable").isColumnVisible(col_id));
+                console.log("show_all");
+                $$(entry.id).toggle();
+            }
+        })
+    };
+
+
+
+
+
+
+    function toggleColumn(id) {
+        // console.log(this.getParentView())
+        var col_id = id.substr(1);
+        var state = parseInt(id.substr(0, 1));
+        console.log(col_id); //this.getValue());
+        if ($$("masterdatatable").isColumnVisible(col_id) && state == 0) {
+            console.log("hide_toogle")
+            $$("masterdatatable").hideColumn(col_id, { spans: true });
+        } else {
+            console.log("show_toogle")
+            $$("masterdatatable").showColumn(col_id, { spans: true });
+        }
+    }
 
     // Функция открывает вкладку "Закладка"
     function change_tab(id) {
@@ -285,6 +633,9 @@
         } else if (id == "users_button") {
             console.log("Пользователи");
             $$("tabViewInfo").getTabbar().setValue("users_tab");
+        } else if (id == "alarm_button") {
+            console.log("Пользователи");
+            $$("tabViewInfo").getTabbar().setValue("events_tab");
         }
     };
     </script>
