@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./src/webix/webix.css" type="text/css" charset="utf-8">
+    <script src="./src/webix/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./src/webix/components/sidebar/sidebar.js"></script>
+    <link rel="stylesheet" href="./src/webix/components/sidebar/sidebar.css">
+    <script src="./src/data/data.js" charset="utf-8"></script>
+    <script src="./src/webix/components/complex/scheduler/codebase/scheduler.js"></script>
+    <link rel="stylesheet" href="./src/webix/components/complex/scheduler/codebase/scheduler.css" type="text/css" charset="utf-8">
+    <script src="./src/webix/i18n/ru.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+    webix.codebase = "./src/webix/components/complex/scheduler/codebase/";
+    </script>
+</head>
+
+<body>
+    <script type="text/javascript" charset="utf-8">
+    webix.i18n.setLocale("ru-RU");
+    var menu_data = [{
+            id: "show_layer",
+            icon: "eye",
+            icon2: "",
+            value: "cкрыть все слои"
+        },
+
+        {
+            id: "sdp_layer",
+            icon: "eye",
+            icon2: "pencil",
+            value: "ТПУ"
+
+
+        },
+        {
+            id: "premise_layer",
+            icon: "eye",
+            value: "Объекты"
+        },
+        {
+            id: "ps_layer",
+            icon: "eye",
+            value: "Насосные станции"
+        },
+        {
+            id: "xs_layer",
+            icon: "eye",
+            value: "Межсекторные расходомеры"
+        },
+        {
+            id: "pres_sens",
+            icon: "eye",
+            value: "Датчики давления"
+        },
+        {
+            id: "scada_layer",
+            icon: "eye",
+            value: "SCADA"
+        },
+        {
+            id: "space",
+
+            value: ""
+        },
+        {
+            id: "_tec",
+
+            icon: "toggle-on",
+            value: "Тех. сектора"
+        },
+        {
+            id: "_ter",
+            icon: "toggle-off",
+            value: "Терр. сектора"
+        },
+        {
+            id: "_ps",
+            icon: "toggle-off",
+            value: "Зоны влияния НС"
+        },
+        {
+            id: "_auto",
+            icon: "toggle-off",
+            value: "Автоматизировано"
+        },
+        {
+            id: "_sent",
+            icon: "toggle-off",
+            value: "Передача данных"
+        }
+
+
+    ];
+
+
+    webix.ui({
+        view: "window",
+        id: "win3",
+        width: 800,
+        height: 800,
+        position: "center",
+        resize: true,
+        move: true,
+        head: {
+            view: "toolbar",
+            margin: -4,
+            cols: [{
+                    view: "button",
+                    type: "icon",
+                    icon: "bars",
+                    width: 37,
+                    // align: "left",
+                    css: "app_button",
+                    click: function() {
+                        console.log($$("menu"));
+                        $$("menu").toggle();
+                    }
+                },
+                {
+                    view: "label",
+                    label:"<span class='webix_icon fa-map'></span> Карта",
+                    align: "center"
+                },
+
+
+                {
+                    view: "icon",
+                    icon: "question-circle"
+                },
+                {
+                    view: "icon",
+                    icon: "cog",
+                    click: "webix.message('Настройки')"
+                },
+                {
+                    view: "icon",
+                    icon: "minus",
+                    click: function() {
+                        console.log($$("menu").config.data[0].icon);
+                        $$("menu").config.data[0].icon = "eye-slash";
+                        $$("menu").refresh();
+                    }
+                },
+
+                {
+                    view: "icon",
+                    icon: "desktop",
+                    click: function() {
+                        $$("win3").config.fullscreen = !$$("win3").config.fullscreen;
+                        $$("win3").resize();
+                    }
+                },
+                {
+                    view: "icon",
+                    icon: "times-circle",
+                    click: "$$('win3').close();"
+                }
+            ]
+        },
+
+        body: {
+            cols: [{
+                    id: "menu",
+                    view: "sidebar",
+                    data: menu_data,
+                    template: " </span> <span class='webix_icon fa-#icon2#'></span><span class='webix_icon fa-#icon#'></span> #value#",
+                    animate: true,
+                    select: false,
+                    css: "my_menu",
+                    on: {
+                        onItemDblClick: function(id) {
+                            if (id.substr(0, 1) != "_") {
+                                if (id != "show_layer") {
+                                    pencil_change(id)
+                                }
+                                $$("menu").config.data.forEach(function(e) {
+                                    if (e.icon == "eye-slash" && e.icon2 == "pencil" && id != "show_layer") {
+                                        eye_change(id)
+                                    }
+                                })
+                            }
+                        },
+                        onItemClick: function(id) {
+                            if (id.substr(0, 1) == "_") {
+                                $$("menu").config.data.forEach(function(e) {
+                                    if (e.id != id & e.icon == "toggle-on") {
+                                        e.icon = "toggle-off"
+                                    }
+                                    if (e.id == id & e.icon == "toggle-off") {
+                                        e.icon = "toggle-on"
+                                    }
+                                    $$("menu").refresh()
+                                })
+                            } else {
+
+                                $$("menu").config.data.forEach(function(e) {
+                                    if (id == "show_layer" && e.id == id) {
+                                        if (e.icon == "eye") {
+                                            $$("menu").config.data.forEach(function(el) {
+                                                if (el.icon == "eye") {
+                                                    el.icon = "eye-slash"
+                                                }
+                                            })
+                                            e.value = "показать все слои"
+                                            e.icon = "eye-slash"
+                                            $$("menu").refresh()
+                                        } else if (e.icon == "eye-slash") {
+                                            $$("menu").config.data.forEach(function(el) {
+                                                if (el.icon == "eye-slash") {
+                                                    el.icon = "eye"
+                                                }
+                                            })
+                                            e.value = "cкрыть все слои"
+                                            e.icon = "eye"
+                                            $$("menu").refresh()
+                                        }
+
+                                    }
+                                })
+                                $$("menu").config.data.forEach(function(e) {
+                                    if (e.id != "show_layer" && e.icon2 != "pencil" && e.id == id) {
+                                        console.log("eye_change")
+                                        eye_change(id)
+                                    }
+                                })
+                            }
+                        }
+                    }
+                },
+                {
+                    template: ""
+                }
+            ]
+        }
+
+    }).show();
+
+
+
+
+    // webix.ui({
+    //     view: "window",
+    //     id: "win3",
+    //     width: 300,
+    //     height: 800,
+    //     position: "center",
+    //     modal: true,
+    //     move: true,
+    //     head: {
+    //         rows: [{
+    //             cols: [{ view: "label", label: "ВЫБЕРИТЕ СТОЛБЦЫ", align: "center" },
+    //                 { view: "button", type: "icon", width: 30, css: "app_button", icon: "window-close", tooltip: "Закрыть", click: function() { $$("win3").hide() } }
+    //             ]
+    //         }, {
+    //             cols: [{ view: "button", width: 150, tooltip: "Выбрать все", label: "Выбрать все", click: show_all },
+    //                 { view: "button", width: 150, tooltip: "Снять все", label: "Снять все", click: hide_all }
+    //             ]
+    //         }]
+
+    //     },
+    //     body: webix.copy(form1)
+    // });
+
+    // console.log($$("menu").config.data);
+    // .foreach(
+    //      console.log(this.icon)
+    //  );
+
+    function eye_change(layer_id) {
+        $$("menu").config.data.forEach(function(e) {
+            if (e.id == layer_id && e.icon == "eye")
+                e.icon = "eye-slash"
+            else if (e.id == layer_id && e.icon == "eye-slash")
+                e.icon = "eye"
+        });
+        $$("menu").refresh();
+    };
+
+    function eye_change_all(layer_id) {
+        $$("menu").config.data.forEach(function(e) {
+            if (e.id == layer_id && e.icon == "eye")
+                e.icon = "eye-slash"
+            else if (e.id == layer_id && e.icon == "eye-slash")
+                e.icon = "eye"
+        });
+        $$("menu").refresh();
+    };
+
+    function pencil_change(layer_id) {
+        $$("menu").config.data.forEach(function(e) {
+            if (e.id == layer_id)
+                e.icon2 = "pencil"
+            else
+                e.icon2 = ""
+        });
+        $$("menu").refresh();
+    };
+
+    function show_all() {
+        form1.elements.forEach(function(entry) {
+            var state = parseInt($$(entry.id).getValue().substr(0, 1));
+            var col_id = $$(entry.id).getValue().substr(1);
+            if ($$("masterdatatable").isColumnVisible(col_id) == false && state == 0) {
+                console.log(col_id + " " + $$("masterdatatable").isColumnVisible(col_id));
+                console.log("show_all");
+                $$(entry.id).toggle();
+            }
+        })
+    };
+
+    function toggleColumn(id) {
+        // console.log(this.getParentView())
+        var col_id = id.substr(1);
+        var state = parseInt(id.substr(0, 1));
+        if ($$("masterdatatable").isColumnVisible(col_id) && state == 0) {
+            console.log("hide_toogle")
+            $$("masterdatatable").hideColumn(col_id, { spans: true });
+        } else {
+            console.log("show_toogle")
+            $$("masterdatatable").showColumn(col_id, { spans: true });
+        }
+    };
+    </script>
+</body>
+
+</html>

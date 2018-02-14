@@ -8,11 +8,20 @@
     <script src="./src/webix/components/sidebar/sidebar.js"></script>
     <link rel="stylesheet" href="./src/webix/components/sidebar/sidebar.css">
     <script src="./src/data/data.js" charset="utf-8"></script>
+    <script src="./src/webix/components/complex/scheduler/codebase/scheduler.js"></script>
+    <link rel="stylesheet" href="./src/webix/components/complex/scheduler/codebase/scheduler.css" type="text/css" charset="utf-8">
+    <script src="./src/webix/i18n/ru.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+    webix.codebase = "./src/webix/components/complex/scheduler/codebase/";
+    </script>
 </head>
 
 <body>
     <script type="text/javascript" charset="utf-8">
-    var selected = sdpData;
+    var selected_columns = selectedColumns;
+    var selected_data = selectedData;
+    var sdp_columns = gridColumns;
+    var sdp_data = sdpData;
     var tab_data = tabData;
     var bm_data = bmData;
     var ev_data = eventData;
@@ -44,7 +53,7 @@
                     id: "ui_start",
                     value: "Стартовая страница",
                     icon: "link",
-                    link: "http://127.0.0.1:12345/index_sdp_premise_ps_icon.html"
+                    link: "http://127.0.0.1:12349/index_sdp_premise_ps_icon.html"
                 }
             ]
         },
@@ -332,7 +341,7 @@
             labelPosition: "top",
         }
     };
-
+    webix.i18n.setLocale("ru-RU");
 
     webix.ui({
         view: "window",
@@ -378,7 +387,19 @@
                     { view: "search", width: 200, value: "Поиск" },
                     { view: "button", type: "icon", width: 35, css: "app_button", icon: "home", tooltip: "Домой" },
                     { view: "button", type: "icon", width: 35, css: "app_button", icon: "save", tooltip: "Сохранить" },
-                    { view: "button", type: "icon", width: 45, css: "app_button", icon: "calendar", badge: 3, tooltip: "Расписание" },
+                    {
+                        view: "button",
+                        type: "icon",
+                        width: 45,
+                        css: "app_button",
+                        icon: "calendar",
+                        badge: 3,
+                        tooltip: "Расписание",
+                        id: "schedule_button",
+                        on: {
+                            'onItemClick': change_tab
+                        }
+                    },
                     { view: "button", type: "icon", width: 45, css: "app_button", icon: "envelope-o", badge: 4, tooltip: "Почта" },
                     {
                         view: "button",
@@ -515,6 +536,15 @@
                                         }
                                     },
                                     {
+                                        header: "Расписание",
+                                        width: 150,
+                                        height: 1,
+                                        body: {
+                                            id: "schedule_tab",
+                                            view: "datatable"
+                                        }
+                                    },
+                                    {
                                         header: "Отчет",
                                         width: 150,
                                         height: 1,
@@ -522,16 +552,62 @@
                                         body: {
                                             id: "report_1",
                                             rows: [{
-                                                    cols: [{
-
-                                                        },
+                                                    multi: true,
+                                                    view: "accordion",
+                                                    rows: [
+                                                        { header: "Параметры отчета", body: "Форма ввода", height: 140 }
+                                                    ]
+                                                },
+                                                {
+                                                    cols: [{},
                                                         { view: "resizer" },
                                                         {
-                                                            view: "form",
-                                                            scroll: false,
-                                                            width: 500,
-                                                            scroll: true,
-                                                            elements: form1
+                                                            rows: [{
+                                                                    cols: [{
+                                                                        view: "datepicker",
+                                                                        value: new Date(2017, 10, 9),
+                                                                        label: "Выберите даты:",
+                                                                        labelWidth: 120,
+                                                                        timepicker: true,
+                                                                        multiselect: true
+                                                                    }, { view: "button", label: "Огонь", type: "icon", css: "app_button", icon: "fire", width: 100 }]
+                                                                },
+                                                                {
+                                                                    view: "tabview",
+                                                                    id: "tabViewInfo",
+                                                                    animate: true,
+                                                                    cells: [{
+                                                                            header: "Информация",
+                                                                            width: 150,
+                                                                            height: 1,
+                                                                            body: {
+                                                                                view: "datatable",
+                                                                                id: "info_tab",
+                                                                                css: "rounded_top",
+                                                                                scrollX: true,
+                                                                                columns: selected_columns,
+                                                                                select: "row",
+                                                                                multiselect: true,
+                                                                                data: selected_data,
+                                                                                autoConfig: true,
+                                                                                resizeColumn: true,
+                                                                                dragColumn: true
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            header: "График",
+                                                                            width: 150,
+                                                                            height: 1,
+                                                                            body: {
+                                                                                id: "chart_tab",
+                                                                                view: "datatable"
+                                                                            }
+                                                                        }
+
+                                                                    ]
+                                                                }
+                                                            ]
+
                                                         }
                                                     ]
                                                 },
@@ -544,20 +620,35 @@
                                                     columns: gridColumns,
                                                     select: "row",
                                                     multiselect: true,
-                                                    data: selected,
+                                                    data: sdp_data,
                                                     autoConfig: true,
                                                     resizeColumn: true,
-                                                    drag: true
+                                                    dragColumn: true
                                                 },
                                                 {
                                                     cols: [
                                                         { gravity: 3 },
                                                         {
                                                             view: "button",
+                                                            label: "Очистить фильтры",
+                                                            width: 150,
+                                                            click: function() {
+                                                                $$("masterdatatable").eachColumn(function(id, col) {
+                                                                    var filter = this.getFilter(id);
+                                                                    if (filter) {
+                                                                        if (filter.setValue) filter.setValue("") // suggest-based filters 
+                                                                        else filter.value = ""; // html-based: select & text
+                                                                    }
+                                                                });
+                                                                $$("masterdatatable").filterByAll();
+                                                            }
+                                                        },
+                                                        {
+                                                            view: "button",
                                                             label: "Сохранить в файл",
                                                             width: 150,
                                                             click: function() {
-                                                                webix.toExcel($$("masterdatatable"),{ignore: { "checked":true}});
+                                                                webix.toExcel($$("masterdatatable"), { ignore: { "checked": true } });
                                                             }
                                                         },
                                                         { view: "button", label: "Выбрать столбцы", width: 150, click: function() { $$("win2").show() } }
@@ -636,6 +727,9 @@
         } else if (id == "alarm_button") {
             console.log("Пользователи");
             $$("tabViewInfo").getTabbar().setValue("events_tab");
+        } else if (id == "schedule_button") {
+            console.log("Расписание");
+            $$("tabViewInfo").getTabbar().setValue("schedule_tab");
         }
     };
     </script>
