@@ -17,6 +17,7 @@
 </head>
 
 <body>
+
     <script type="text/javascript" charset="utf-8">
     var selected_columns = selectedColumns;
     var selected_data = selectedData;
@@ -365,6 +366,8 @@
         },
         body: webix.copy(form1)
     });
+
+
     webix.ui({
         rows: [{
                 view: "toolbar",
@@ -437,7 +440,7 @@
                             on: {
                                 'onItemClick': change_tab
                             },
-                            template: "{common.icon()}<a target='_blank' href='#link#' style='text-decoration: none; color: gray;'>#value#</a>",
+                            template: "{common.icon()}<a> target='_blank' href='#link#' style='text-decoration: none; color: gray;'>#value#</a>",
                             data: menu_data,
                             width: 350,
                             select: false
